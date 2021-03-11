@@ -45,8 +45,14 @@ class Repeat < Sinatra::Base
         line_items = product.values[0]
 
         total = line_items.inject(0) {|sum, ln| sum + ln.attributes["price"]&.to_f }
+
+        line_item = line_items.detect do |ln|
+          ln.attributes["product_id"] === product_id
+        end
+
         memo[product_id] = {
-          total: total
+          total: total,
+          line_item: line_item
         }
       end
       memo

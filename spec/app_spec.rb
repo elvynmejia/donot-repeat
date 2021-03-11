@@ -19,7 +19,7 @@ describe 'Repeat app' do
       expect(last_response.status).to eq(200)
       response = JSON.parse(last_response.body)
       expect(response["revenue_by_product"]["5764030038175"]["total"]).to eq(3.0)
-      expect(response["revenue_by_product"]["5764030038175"]["product"]).not_to be_nil
+      expect(response["revenue_by_product"]["5764030038175"]["line_item"]["name"]).to eq("long tree")
 
       expect(response["orders_placed"]).to eq(50)
     end
