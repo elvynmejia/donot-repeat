@@ -35,7 +35,6 @@ class Repeat < Sinatra::Base
     end
 
     # 3. What products generate the most revenue?
-
     products_id_to_order = orders.group_by do |order|
       order.attributes["line_items"].group_by { |ln| ln.attributes["product_id"] }
     end
