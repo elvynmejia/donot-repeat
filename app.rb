@@ -16,21 +16,6 @@ class Repeat < Sinatra::Base
     content_type :json
   end
 
-  # get '/' do
-  #   { order: ShopifyAPI::Order.find(:all).first }.to_json
-  # end
-  #
-  # # should consider status, pagination, rate limiting
-  # get '/orders' do
-  #   ltv = ShopifyAPI::Order.find(:all).inject(0) do |sum,x|
-  #     sum + x.attributes["total_price"].to_f
-  #   end
-  #
-  #   # binding.pry
-  #
-  #   { orders: ShopifyAPI::Order.find(:all).map(&:to_json) }.to_json
-  # end
-
   # TODO: MUST should consider order status, pagination and rate limiting
   get '/stats' do
     orders = ShopifyAPI::Order.find(:all)
@@ -49,10 +34,29 @@ class Repeat < Sinatra::Base
       }
     end
 
+    # 3. What products generate the most revenue?
+
+    products_id_to_order = orders.group_by do |order|
+      order.attributes["line_items"].group_by { |ln| ln.attributes["product_id"] }
+    end
+
+    revenue_by_product = products_id_to_order.flatten.each_with_object({}) do |product, memo|
+      if product.respond_to?(:keys)
+        product_id = product.keys[0]
+        line_items = product.values[0]
+
+        total = line_items.inject(0) {|sum, ln| sum + ln.attributes["price"]&.to_f }
+        memo[product_id] = {
+          total: total
+        }
+      end
+      memo
+    end
+
     {
       ltvs: ltvs,
       orders_placed: ShopifyAPI::Order.find(:all).length,
-      product_count: [] #products_id_to_order.flatten,
+      revenue_by_product: revenue_by_product,
     }.to_json
   end
 end
