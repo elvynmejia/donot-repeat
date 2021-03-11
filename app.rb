@@ -18,6 +18,11 @@ class Repeat < Sinatra::Base
   get '/' do
     { order: ShopifyAPI::Order.find(:all).first }.to_json
   end
+
+  # should consider status, pagination, rate limiting
+  get '/orders' do
+    { orders: ShopifyAPI::Order.find(:all).map(&:to_json) }.to_json
+  end
 end
 
 # Repeat.run!
