@@ -26,11 +26,14 @@ class Repeat < Sinatra::Base
     end
 
     ltvs = customer_id_to_orders.each_with_object({}) do |(customer_id, orders), memo|
+      total = orders.inject(0) {|sum, order| sum + order.attributes["total_price"]&.to_f }
+      customer = orders.detect do |order|
+        break order.attributes["customer"] if order.attributes["customer"].attributes["id"] === customer_id
+      end
+
       memo[customer_id] = {
-        total: orders.inject(0) {|sum, order| sum + order.attributes["total_price"]&.to_f },
-        customer: orders.detect do |order|
-          break order.attributes["customer"] if order.attributes["customer"].attributes["id"] === customer_id
-        end
+        total: total,
+        customer: customer
       }
     end
 
