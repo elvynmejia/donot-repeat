@@ -31,16 +31,28 @@ class Repeat < Sinatra::Base
   #   { orders: ShopifyAPI::Order.find(:all).map(&:to_json) }.to_json
   # end
 
+  # TODO: MUST should consider order status, pagination and rate limiting
   get '/stats' do
     orders = ShopifyAPI::Order.find(:all)
 
-    ltv = orders.inject(0) do |sum,order|
-      sum + order.attributes["total_price"].to_f
+    # 2. What is the LTV (lifetime value) of our customers? That is, how much revenue does a customer generate?
+    customer_id_to_orders = orders.group_by do |order|
+      order.attributes["customer"].attributes["id"]
+    end
+
+    ltvs = customer_id_to_orders.each_with_object({}) do |(customer_id, orders), memo|
+      memo[customer_id] = {
+        total: orders.inject(0) {|sum, order| sum + order.attributes["total_price"]&.to_f },
+        customer: orders.detect do |order|
+          break order.attributes["customer"] if order.attributes["customer"].attributes["id"] === customer_id
+        end
+      }
     end
 
     {
-      ltv: ltv,
-      orders_placed: ShopifyAPI::Order.find(:all).length
+      ltvs: ltvs,
+      orders_placed: ShopifyAPI::Order.find(:all).length,
+      product_count: [] #products_id_to_order.flatten,
     }.to_json
   end
 end
