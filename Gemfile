@@ -7,6 +7,9 @@ gem 'shopify_api'
 group :test, :development do
   gem "rspec"
   gem "rack-test"
+  gem 'pry'
+  gem 'pry-remote'
+  gem 'pry-nav'
 end
 
 

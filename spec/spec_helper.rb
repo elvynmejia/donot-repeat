@@ -1,6 +1,7 @@
 require './app'
 require 'rspec'
 require 'rack/test'
+load './.pryrc';
 
 def app
   Repeat
