@@ -1,8 +1,13 @@
 require 'sinatra/base'
 require 'json'
 require 'dotenv'
+require 'shopify_api'
 
 Dotenv.load('.env.development')
+
+# should go on an initializer
+ShopifyAPI::Base.site = "https://#{ENV['SHOPIFY_API_KEY']}:#{ENV['SHOPIFY_PASSWORD']}@benton-dev.myshopify.com"
+ShopifyAPI::Base.api_version = '2020-10'
 
 class Repeat < Sinatra::Base
 
@@ -11,8 +16,7 @@ class Repeat < Sinatra::Base
   end
 
   get '/' do
-    # puts "============= ENV['SHOPIFY_API_KEY'] => #{ENV['SHOPIFY_API_KEY']} ============"
-    { root: "Wake me Up" }.to_json
+    { order: ShopifyAPI::Order.find(:all).first }.to_json
   end
 end
 

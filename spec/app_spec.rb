@@ -8,7 +8,7 @@ describe 'Repeat app' do
     specify "returns some json" do
       get '/'
       last_response.should be_ok
-      expect(JSON.parse(last_response.body)["root"]).to eq("Wake me Up")
+      expect(JSON.parse(last_response.body)["order"]["id"]).to eq(2785488044191)
     end
   end
 end
