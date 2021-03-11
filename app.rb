@@ -58,9 +58,11 @@ class Repeat < Sinatra::Base
       memo
     end
 
+    #NOTE ShopifyAPI::Order.count differs from ShopifyAPI::Order.find(:all)
+    # so we would have to paginate ShopifyAPI::Order.find(:all) to get the remaining orders
     {
       ltvs: ltvs,
-      orders_placed: ShopifyAPI::Order.find(:all).length,
+      orders_placed: ShopifyAPI::Order.count,
       revenue_by_product: revenue_by_product,
     }.to_json
   end
