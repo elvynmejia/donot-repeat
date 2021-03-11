@@ -1,10 +1,15 @@
-require 'sinatra'
+require 'sinatra/base'
 require 'json'
 
-before do
-  content_type :json
+class Repeat < Sinatra::Base
+
+  before do
+    content_type :json
+  end
+
+  get '/' do
+    { root: "Wake me Up" }.to_json
+  end
 end
 
-get '/' do
-   { root: "Wake me Up" }.to_json
-end
+# Repeat.run!
