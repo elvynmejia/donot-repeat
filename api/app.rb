@@ -3,6 +3,8 @@ require 'json'
 require 'dotenv'
 require 'shopify_api'
 require 'pry'
+require 'sinatra/cross_origin'
+
 
 Dotenv.load('.env.development')
 
@@ -10,14 +12,32 @@ Dotenv.load('.env.development')
 ShopifyAPI::Base.site = "https://#{ENV['SHOPIFY_API_KEY']}:#{ENV['SHOPIFY_PASSWORD']}@benton-dev.myshopify.com"
 ShopifyAPI::Base.api_version = '2020-10'
 
+
+
 class Repeat < Sinatra::Base
+  register Sinatra::CrossOrigin
+
+  configure do
+    enable :cross_origin
+  end
+
+  # routes...
+  options "*" do
+    response.headers["Allow"] = "GET, PUT, POST, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type, Accept, X-User-Email, X-Auth-Token"
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    200
+  end
+
 
   before do
+    response.headers['Access-Control-Allow-Origin'] = '*'
     content_type :json
   end
 
   # TODO: MUST consider order status, pagination, rate limiting, data store, data consistency and policy etc
   get '/stats' do
+
     orders = ShopifyAPI::Order.find(:all)
 
     # 2. What is the LTV (lifetime value) of our customers? That is, how much revenue does a customer generate?
@@ -60,13 +80,19 @@ class Repeat < Sinatra::Base
       end
       memo
     end
+    #
+    # #NOTE ShopifyAPI::Order.count differs from ShopifyAPI::Order.find(:all)
+    # # so we would have to paginate ShopifyAPI::Order.find(:all) to get the remaining orders
+    # {
+    #   ltvs: ltvs,
+    #   orders_placed: ShopifyAPI::Order.count,
+    #   revenue_by_product: revenue_by_product,
+    # }.to_json
 
-    #NOTE ShopifyAPI::Order.count differs from ShopifyAPI::Order.find(:all)
-    # so we would have to paginate ShopifyAPI::Order.find(:all) to get the remaining orders
     {
-      ltvs: ltvs,
-      orders_placed: ShopifyAPI::Order.count,
-      revenue_by_product: revenue_by_product,
+      ltvs: "ltvs",
+      orders_placed: "ShopifyAPI::Order.count",
+      revenue_by_product: "revenue_by_product",
     }.to_json
   end
 end
