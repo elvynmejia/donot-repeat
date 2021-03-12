@@ -16,18 +16,38 @@ const App = (props) => {
     // handle errors try/catch
     const response = await axios.get(API_URL);
     setData(response.data);
-  }, [])
-
+  }, []);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
+  const {
+    orders_placed,
+    ltvs,
+    revenue_by_product
+  } = data;
+
   return (
     <div>
-      <h5>Welcome to Repeat</h5>
-      <p>See analytics some analytics below</p>
+      <h3>Welcome to Repeat</h3>
+      <p>See some analytics below</p>
       <pre>{JSON.stringify(data)}</pre>
+      <p>Number of orders placed: {orders_placed}</p>
+
+      <h4>LTVS by customer</h4>
+      <ul>
+        {Object.keys(ltvs).map(key => {
+          const { total, customer } = ltvs[key];
+
+          return (
+            <li key={key}>
+              {customer.first_name} has spent ${total}
+            </li>
+          )
+        })}
+      </ul>
+
     </div>
 
   )
