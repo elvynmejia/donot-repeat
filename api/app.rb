@@ -36,9 +36,12 @@ class Repeat < Sinatra::Base
   end
 
   # TODO: MUST consider order status, pagination, rate limiting, data store, data consistency and policy etc
+  # investigate
+  # 2021-03-11 18:45:07 - ActiveResource::UnauthorizedAccess - Failed.
+  # Response code = 401.  Response message = Unauthorized ([API] Invalid API key or access token (unrecognized login or wrong password)).:
   get '/stats' do
 
-    # orders = ShopifyAPI::Order.find(:all)
+    orders = ShopifyAPI::Order.find(:all)
     #
     # # 2. What is the LTV (lifetime value) of our customers? That is, how much revenue does a customer generate?
     # customer_id_to_orders = orders.group_by do |order|
