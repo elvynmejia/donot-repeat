@@ -1,5 +1,5 @@
 # Getting started
-`git clone https://github.com/elvynmejia/dont-repeat.git`   
+`git clone https://github.com/elvynmejia/donot-repeat.git`   
 `cd dont-repeat`
 
 # start api backend app
