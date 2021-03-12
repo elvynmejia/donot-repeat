@@ -58,9 +58,7 @@ const App = (props) => {
           )
         })}
       </ul>
-
     </div>
-
   )
 }
 export default App;
