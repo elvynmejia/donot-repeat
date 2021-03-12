@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import './App.css';
 
-const API_URL = 'http://localhost:9292/stats';
+const API_URL = 'http://localhost:9292/mocked-stats';
 
 const App = (props) => {
   const [data, setData] = useState({
