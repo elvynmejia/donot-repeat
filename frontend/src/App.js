@@ -30,19 +30,30 @@ const App = (props) => {
 
   return (
     <div>
-      <h3>Welcome to Repeat</h3>
-      <p>See some analytics below</p>
-      <pre>{JSON.stringify(data)}</pre>
-      <p>Number of orders placed: {orders_placed}</p>
+      <h3>Welcome to Repeat Analytics</h3>
+      <h4>Number of orders placed: {orders_placed}</h4>
 
-      <h4>LTVS by customer</h4>
+      <h4>LTVS by Customer Name</h4>
       <ul>
         {Object.keys(ltvs).map(key => {
           const { total, customer } = ltvs[key];
 
           return (
             <li key={key}>
-              {customer.first_name} has spent ${total}
+              {customer.first_name} has spent ${total.toFixed(2)}
+            </li>
+          )
+        })}
+      </ul>
+
+      <h4>Revenue by Product Name</h4>
+      <ul>
+        {Object.keys(revenue_by_product).map(key => {
+          const { total, line_item } = revenue_by_product[key];
+
+          return (
+            <li key={key}>
+              {line_item.name} has generate ${total.toFixed(2)} in revenue
             </li>
           )
         })}
