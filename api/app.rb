@@ -16,7 +16,7 @@ class Repeat < Sinatra::Base
     content_type :json
   end
 
-  # TODO: MUST should consider order status, pagination and rate limiting
+  # TODO: MUST consider order status, pagination, rate limiting, data store, data consistency and policy etc
   get '/stats' do
     orders = ShopifyAPI::Order.find(:all)
 

@@ -1,2 +1,5 @@
-# test root endpoint
-curl localhost:4567
+# start app
+rackup config.ru
+
+# test /stats endpoint
+curl localhost:9292/stats
