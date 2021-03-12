@@ -89,11 +89,62 @@ class Repeat < Sinatra::Base
     #   revenue_by_product: revenue_by_product,
     # }.to_json
 
-    {
-      ltvs: "ltvs",
-      orders_placed: "ShopifyAPI::Order.count",
-      revenue_by_product: "revenue_by_product",
-    }.to_json
+    mocked_data = {
+      orders_placed: 89,
+      ltvs: {
+        "4105388654751": {
+          total: 17.0,
+          customer: {
+            first_name: "Elvyn"
+          }
+        },
+        "4105388654752": {
+          total: 18.0,
+          customer: {
+            first_name: "Kara"
+          }
+        },
+        "4105388654753": {
+          total: 12.0,
+          customer: {
+            first_name: "Dottie"
+          }
+        },
+        "4105388654754": {
+          total: 10.0,
+          customer: {
+            first_name: "Gee Gee"
+          }
+        }
+      },
+      revenue_by_product: {
+        "5764030038175": {
+          total: 3.0,
+          line_item: {
+            name: "Kit & Kaboodle"
+          }
+        },
+        "5764030038176": {
+          total: 5.0,
+          line_item: {
+            name: "Temptations"
+          }
+        },
+        "5764030038177": {
+          total: 8.0,
+          line_item: {
+            name: "Fancy Feast"
+          }
+        },
+        "5764030038178": {
+          total: 10.0,
+          line_item: {
+            name: "PURINA Kitten: Chicken and Liver Entrée"
+          }
+        }
+      }
+    }
+    mocked_data.to_json
   end
 end
 
